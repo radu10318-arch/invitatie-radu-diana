@@ -797,7 +797,21 @@ window.addEventListener('load', () => {
 });
 
 // RSVP
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycby90Dh4GM729T6de9qWSqC8A4qbO3g0VLYPrWLesZDrWYAzI4oUPJ654dzX2Qmywcn9aQ/exec';
 let choice = null;
+
+// Pre-fill name from ?invitat=Nume
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const invitat = params.get('invitat');
+  if (invitat) {
+    const decoded = decodeURIComponent(invitat);
+    document.getElementById('guestName').value = decoded;
+    // also show a personal welcome in the RSVP section
+    const q = document.querySelector('.rsvp-question');
+    if (q) q.textContent = 'Ești alături de noi, ' + decoded + '?';
+  }
+});
 
 function startRSVP(c) {
   choice = c;
@@ -814,7 +828,20 @@ function submitRSVP() {
     document.getElementById('guestName').placeholder = 'Te rugăm să introduci numele...';
     return;
   }
+
+  const params = new URLSearchParams(window.location.search);
+  const invitat = params.get('invitat') || '';
+
   document.getElementById('nameForm').style.display = 'none';
+
+  // Send to Google Sheets (no-cors, fire and forget)
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, response: choice === 'yes' ? 'DA' : 'NU', invitat })
+  }).catch(() => {}); // silent fail — UI always shows confirmation
+
   if (choice === 'yes') {
     document.getElementById('confYesText').textContent = name + ', ne bucurăm că vii! 🥂';
     document.getElementById('confYes').style.display = 'block';
