@@ -797,7 +797,7 @@ window.addEventListener('load', () => {
 });
 
 // RSVP
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxmav6qbFNLmG7KBuRlhAOiW15gFDE3ZO1PI3ZWFYXquw8CB-WsNc8-EWMM6Yj_71Z3/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwH8ZzLSdiSVQPWNa-hPNfL-XIQ_H57A6bvjpmraZE6tcD3rHadjgJtjrwSLAdEMj_kAg/exec';
 let choice = null;
 
 // Pre-fill name from ?invitat=Nume
@@ -834,26 +834,13 @@ function submitRSVP() {
 
   document.getElementById('nameForm').style.display = 'none';
 
-  // Send to Google Sheets via hidden iframe form (bypasses CORS)
-  const iframe = document.createElement('iframe');
-  iframe.name = 'hidden_iframe';
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+  // Send to Google Sheets via GET (most reliable for Apps Script)
+  const url = SHEET_URL + '?name=' + encodeURIComponent(name) +
+    '&response=' + encodeURIComponent(choice === 'yes' ? 'DA' : 'NU') +
+    '&invitat=' + encodeURIComponent(invitat);
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = SHEET_URL;
-  form.target = 'hidden_iframe';
-
-  [['name', name], ['response', choice === 'yes' ? 'DA' : 'NU'], ['invitat', invitat]].forEach(([k, v]) => {
-    const inp = document.createElement('input');
-    inp.type = 'hidden'; inp.name = k; inp.value = v;
-    form.appendChild(inp);
-  });
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(() => { form.remove(); iframe.remove(); }, 3000);
+  const img = new Image();
+  img.src = url;
 
   if (choice === 'yes') {
     document.getElementById('confYesText').textContent = name + ', ne bucurăm că vii! 🥂';
