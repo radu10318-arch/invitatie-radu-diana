@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radu & Diana – Cununie Civilă</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1208;
+    --card-bg: #2a1f10;
+    --gold: #d4a853;
+    --gold-light: #f0c97a;
+    --cream: #f5ede0;
+    --sage: #5a7a5c;
+    --rust: #c05a2a;
+    --text-main: #f5ede0;
+    --text-soft: #c8b89a;
+    --text-dark: #1a1208;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(212,168,83,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(90,122,92,0.07) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 56px 16px 40px;
+  }
+
+  .hero-top-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+    margin-bottom: 24px;
+    text-align: center;
+    display: block;
+  }
+
+  .botanical-wrap {
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  .hero-names {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.8rem, 13vw, 6.5rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-names .amp {
+    color: var(--gold);
+    font-size: 1.1em;
+    line-height: 0.85;
+    display: block;
+    text-align: center;
+  }
+
+  .hero-divider {
+    width: 120px;
+    height: 1.5px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 28px auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .hero-event {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+    margin-bottom: 14px;
+    text-align: center;
+    display: block;
+  }
+
+  .hero-date {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.1s forwards;
+    text-align: center;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 30px rgba(212,168,83,0.35);
+  }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 52px 0 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.3s forwards;
+  }
+
+  /* ── CARDS ── */
+  .cards-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .day-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(212,168,83,0.2);
+    background: var(--card-bg);
+    opacity: 0;
+    animation: fadeUp 0.9s ease var(--d) forwards;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    background: rgba(212,168,83,0.08);
+    border-bottom: 1px solid rgba(212,168,83,0.12);
+  }
+
+  .card-day-badge {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    background: rgba(212,168,83,0.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(212,168,83,0.3);
+  }
+
+  .card-date-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--text-soft);
+  }
+
+  /* ── SCRATCH ── */
+  .scratch-wrapper {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    cursor: crosshair;
+    overflow: hidden;
+    background: #0f0c07;
+  }
+
+  .day-card.multi .scratch-wrapper {
+    height: 148px;
+  }
+
+  .scratch-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    padding: 14px 24px;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .reveal-icon  { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(212,168,83,0.5)); }
+  .reveal-time  { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+  .reveal-activity { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-style: italic; color: var(--cream); line-height: 1.25; }
+  .reveal-location { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-soft); margin-top: 2px; }
+
+  /* multi layout */
+  .multi-events-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 22px;
+    pointer-events: none;
+    gap: 0;
+  }
+
+  .multi-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(212,168,83,0.1);
+  }
+
+  .multi-row:last-child { border-bottom: none; }
+
+  .m-time {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 700;
+    min-width: 44px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .m-sep {
+    width: 1px;
+    height: 30px;
+    background: rgba(212,168,83,0.22);
+    flex-shrink: 0;
+  }
+
+  .m-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+
+  .m-loc {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-top: 2px;
+  }
+
+  /* scratch canvas */
+  .scratch-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    touch-action: none;
+  }
+
+  .scratch-hint {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 11;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+
+  .hint-icon {
+    font-size: 1.9rem;
+    display: block;
+    margin-bottom: 4px;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  .hint-text {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cream);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+  }
+
+  /* highlight day 2 */
+  .day-card.highlight .card-day-badge {
+    background: var(--gold);
+    color: var(--text-dark);
+    border-color: var(--gold);
+  }
+
+  .day-card.highlight .card-header {
+    background: linear-gradient(135deg, rgba(212,168,83,0.16), rgba(192,90,42,0.1));
+  }
+
+  /* ── RSVP ── */
+  .rsvp-section {
+    margin-top: 52px;
+    background: var(--card-bg);
+    border: 1px solid rgba(212,168,83,0.22);
+    border-radius: 12px;
+    padding: 40px 28px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 2s forwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rsvp-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .rsvp-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .rsvp-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 28px;
+  }
+
+  .rsvp-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .btn-yes {
+    background: var(--gold);
+    color: var(--text-dark);
+  }
+
+  .btn-yes:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(212,168,83,0.35);
+  }
+
+  .btn-no {
+    background: transparent;
+    color: var(--text-main);
+    border: 1.5px solid rgba(245,237,224,0.25);
+  }
+
+  .btn-no:hover {
+    border-color: rgba(245,237,224,0.55);
+    transform: translateY(-2px);
+  }
+
+  .name-form {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .name-input {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    padding: 13px 22px;
+    border: 1.5px solid rgba(212,168,83,0.35);
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    width: 100%;
+    max-width: 320px;
+    color: var(--cream);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .name-input::placeholder { color: var(--text-soft); }
+  .name-input:focus { border-color: var(--gold); }
+
+  .btn-confirm {
+    background: var(--sage);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 13px 28px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .btn-confirm:hover { background: #4a6a4c; transform: translateY(-1px); }
+
+  .conf-box {
+    display: none;
+    margin-top: 24px;
+    padding: 24px;
+    border-radius: 8px;
+  }
+
+  .conf-box.yes { background: rgba(90,122,92,0.15); border: 1px solid rgba(90,122,92,0.38); }
+  .conf-box.no  { background: rgba(212,168,83,0.07); border: 1px solid rgba(212,168,83,0.18); }
+
+  .conf-icon { font-size: 2.2rem; margin-bottom: 10px; }
+
+  .conf-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .conf-sub { font-size: 0.78rem; color: var(--text-soft); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 48px 0 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2.2s forwards;
+  }
+
+  .footer-names {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--text-soft);
+  }
+
+  .footer-heart { color: var(--gold); margin: 0 8px; }
+
+  /* ── PETALS ── */
+  .petals-wrap {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 100; overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    top: -30px;
+    animation: fall linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .rsvp-section { padding: 28px 18px; }
+    .card-header { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="petals-wrap" id="petals"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-top-label">vă invităm să fiți alături de noi</p>
+
+    <div class="botanical-wrap">
+      <svg width="260" height="78" viewBox="0 0 300 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 72 Q33 48 58 40" stroke="#5a7a5c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M28 60 Q48 43 63 36" stroke="#5a7a5c" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <path d="M58 40 Q56 20 63 10" stroke="#5a7a5c" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="40" cy="50" rx="9" ry="5" fill="#5a7a5c" opacity="0.55" transform="rotate(-35 40 50)"/>
+        <ellipse cx="23" cy="60" rx="8" ry="4" fill="#7a9a7c" opacity="0.45" transform="rotate(-50 23 60)"/>
+        <ellipse cx="60" cy="26" rx="10" ry="5" fill="#5a7a5c" opacity="0.5" transform="rotate(-65 60 26)"/>
+        <circle cx="64" cy="36" r="4.5" fill="#d4a853" opacity="0.85"/>
+        <circle cx="64" cy="36" r="2" fill="#1a1208"/>
+        <path d="M150 76 Q149 53 150 33" stroke="#d4a853" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <circle cx="150" cy="14" r="10" fill="none" stroke="#d4a853" stroke-width="1.5"/>
+        <circle cx="150" cy="14" r="4" fill="#d4a853" opacity="0.9"/>
+        <circle cx="137" cy="30" r="6" fill="none" stroke="#d4a853" stroke-width="1.2"/>
+        <circle cx="163" cy="30" r="6" fill="none" stroke="#d4a853" stroke-width="1.2"/>
+        <path d="M292 72 Q267 48 242 40" stroke="#5a7a5c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M272 60 Q252 43 237 36" stroke="#5a7a5c" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <path d="M242 40 Q244 20 237 10" stroke="#5a7a5c" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="260" cy="50" rx="9" ry="5" fill="#5a7a5c" opacity="0.55" transform="rotate(35 260 50)"/>
+        <ellipse cx="277" cy="60" rx="8" ry="4" fill="#7a9a7c" opacity="0.45" transform="rotate(50 277 60)"/>
+        <ellipse cx="240" cy="26" rx="10" ry="5" fill="#5a7a5c" opacity="0.5" transform="rotate(65 240 26)"/>
+        <circle cx="236" cy="36" r="4.5" fill="#d4a853" opacity="0.85"/>
+        <circle cx="236" cy="36" r="2" fill="#1a1208"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-names">
+      Radu
+      <span class="amp">&</span>
+      Diana
+    </h1>
+
+    <div class="hero-divider"></div>
+    <p class="hero-event">Cununie Civilă</p>
+    <p class="hero-date">22 – 24 Mai 2026 · Brașov</p>
+  </div>
+
+  <p class="section-label">✦ Programul evenimentului ✦</p>
+
+  <div class="cards-grid">
+
+    <!-- ZIUA 1 -->
+    <div class="day-card multi" style="--d:1.4s">
+      <div class="card-header">
+        <span class="card-day-badge">Ziua 1</span>
+        <span class="card-date-text">Vineri, 22 Mai</span>
+      </div>
+      <div class="scratch-wrapper" id="sw-1">
+        <div class="multi-events-reveal">
+          <div class="multi-row">
+            <span class="m-time">14:00</span>
+            <div class="m-sep"></div>
+            <div>
+              <div class="m-name">🏡 Primire la Cabană</div>
+              <div class="m-loc">Vila Monadin · Săcele, Brașov</div>
+            </div>
+          </div>
+          <div class="multi-row">
+            <span class="m-time">18:00</span>
+            <div class="m-sep"></div>
+            <div>
+              <div class="m-name">🍕 Pizza Party</div>
+              <div class="m-loc">Vila Monadin · Săcele, Brașov</div>
+            </div>
+          </div>
+        </div>
+        <canvas class="scratch-canvas" id="canvas-1"></canvas>
+        <div class="scratch-hint" id="hint-1">
+          <span class="hint-icon">💫</span>
+          <span class="hint-text">Zgârie să descoperi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZIUA 2 -->
+    <div class="day-card highlight" style="--d:1.6s">
+      <div class="card-header">
+        <span class="card-day-badge">⭐ Ziua cea Mare</span>
+        <span class="card-date-text">Sâmbătă, 23 Mai</span>
+      </div>
+      <div class="scratch-wrapper" id="sw-2">
+        <div class="scratch-reveal">
+          <div class="reveal-icon">💍</div>
+          <div class="reveal-time">11:10</div>
+          <div class="reveal-activity">Cununia Civilă</div>
+          <div class="reveal-location">Starea Civilă · Primăria Brașov</div>
+        </div>
+        <canvas class="scratch-canvas" id="canvas-2"></canvas>
+        <div class="scratch-hint" id="hint-2">
+          <span class="hint-icon">💛</span>
+          <span class="hint-text">Zgârie să descoperi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZIUA 3 -->
+    <div class="day-card" style="--d:1.8s">
+      <div class="card-header">
+        <span class="card-day-badge">Ziua 3</span>
+        <span class="card-date-text">Duminică, 24 Mai</span>
+      </div>
+      <div class="scratch-wrapper" id="sw-3">
+        <div class="scratch-reveal">
+          <div class="reveal-icon">🥣</div>
+          <div class="reveal-time">Prânz</div>
+          <div class="reveal-activity">Ciorbă împreună</div>
+          <div class="reveal-location">Vila Monadin · Săcele, Brașov</div>
+        </div>
+        <canvas class="scratch-canvas" id="canvas-3"></canvas>
+        <div class="scratch-hint" id="hint-3">
+          <span class="hint-icon">🌿</span>
+          <span class="hint-text">Zgârie să descoperi</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RSVP -->
+  <div class="rsvp-section">
+    <p class="rsvp-label">✦ Confirmare prezență ✦</p>
+    <p class="rsvp-question">Ești alături de noi?</p>
+
+    <div class="rsvp-btns" id="rsvpBtns">
+      <button class="btn btn-yes" onclick="startRSVP('yes')">✓ &nbsp;Da, vin cu drag!</button>
+      <button class="btn btn-no" onclick="startRSVP('no')">Nu pot fi prezent</button>
+    </div>
+
+    <div class="name-form" id="nameForm">
+      <input class="name-input" id="guestName" type="text" placeholder="Numele tău...">
+      <button class="btn-confirm" onclick="submitRSVP()">Confirmă →</button>
+    </div>
+
+    <div class="conf-box yes" id="confYes">
+      <div class="conf-icon">🥂</div>
+      <div class="conf-text" id="confYesText"></div>
+      <div class="conf-sub">Ne bucurăm enorm! Te așteptăm cu brațele deschise. 🌿</div>
+    </div>
+
+    <div class="conf-box no" id="confNo">
+      <div class="conf-icon">🤍</div>
+      <div class="conf-text" id="confNoText"></div>
+      <div class="conf-sub">Îți mulțumim că ne-ai anunțat. Gândurile noastre bune sunt cu tine!</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p class="footer-names">Radu <span class="footer-heart">♥</span> Diana</p>
+    <p style="font-size:0.68rem;color:#5a4a3a;margin-top:10px;letter-spacing:0.15em;">22 · 23 · 24 MAI 2026</p>
+  </div>
+
+</div>
+
+<script>
+function triggerEmojiRain(emojis) {
+  const c = document.getElementById('petals');
+  for (let i = 0; i < 36; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (1.1 + Math.random() * 1.2) + 'rem';
+    p.style.animationDuration = (3.5 + Math.random() * 4) + 's';
+    p.style.animationDelay = (Math.random() * 2) + 's';
+    c.appendChild(p);
+    setTimeout(() => p.remove(), 10000);
+  }
+}
+
+function initScratch(canvasId, wrapperId, hintId, emojis) {
+  const wrapper = document.getElementById(wrapperId);
+  const canvas  = document.getElementById(canvasId);
+  const hint    = document.getElementById(hintId);
+  const ctx     = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = wrapper.offsetWidth;
+    canvas.height = wrapper.offsetHeight;
+    draw();
+  }
+
+  function draw() {
+    // Rich gold-brown scratch layer
+    const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    g.addColorStop(0,   '#6b4f1a');
+    g.addColorStop(0.35,'#8B6914');
+    g.addColorStop(0.7, '#7a5810');
+    g.addColorStop(1,   '#5a3f0e');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // texture noise
+    ctx.fillStyle = 'rgba(255,255,255,0.025)';
+    for (let i = 0; i < 300; i++) {
+      ctx.beginPath();
+      ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // subtle grain lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 18; i++) {
+      const y = (canvas.height/18)*i + Math.random()*3;
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+    }
+  }
+
+  let painting = false;
+  let revealed = false;
+  let scratchCount = 0;
+  const REVEAL_AT = 18;
+
+  function getXY(e) {
+    const r = canvas.getBoundingClientRect();
+    const s = e.touches ? e.touches[0] : e;
+    return {
+      x: (s.clientX - r.left) * (canvas.width  / r.width),
+      y: (s.clientY - r.top)  * (canvas.height / r.height)
+    };
+  }
+
+  function scratch(x, y) {
+    if (revealed) return;
+    ctx.globalCompositeOperation = 'destination-out';
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, 36);
+    grad.addColorStop(0, 'rgba(0,0,0,1)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, 36, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+
+    scratchCount++;
+    hint.style.opacity = '0';
+
+    if (scratchCount >= REVEAL_AT) {
+      revealed = true;
+      // fade out the canvas layer
+      let op = 1;
+      const fade = setInterval(() => {
+        op -= 0.08;
+        canvas.style.opacity = Math.max(op, 0);
+        if (op <= 0) {
+          clearInterval(fade);
+          canvas.style.display = 'none';
+          hint.style.display = 'none';
+        }
+      }, 20);
+      if (emojis && emojis.length) triggerEmojiRain(emojis);
+    }
+  }
+
+  canvas.addEventListener('mousedown',  e => { painting=true; scratch(...Object.values(getXY(e))); });
+  canvas.addEventListener('mousemove',  e => { if(painting) scratch(...Object.values(getXY(e))); });
+  canvas.addEventListener('mouseup',    () => painting=false);
+  canvas.addEventListener('mouseleave', () => painting=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); painting=true; scratch(...Object.values(getXY(e))); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if(painting) scratch(...Object.values(getXY(e))); }, {passive:false});
+  canvas.addEventListener('touchend',   () => painting=false);
+
+  window.addEventListener('resize', resize);
+  resize();
+}
+
+window.addEventListener('load', () => {
+  initScratch('canvas-1','sw-1','hint-1', ['🍕','🍕','🍺','🍸','🍹','🍕','🍻','🥂','🍸','🍕']);
+  initScratch('canvas-2','sw-2','hint-2', ['💐','💍','🌸','🥂','🍾','🌺','🍽️','💐','🌹','🥗']);
+  initScratch('canvas-3','sw-3','hint-3', ['🥣','🍲','🥣','♨️','🥣','🧅','🥕','🥣','🫙','🧄']);
+});
+
+// RSVP
+let choice = null;
+
+function startRSVP(c) {
+  choice = c;
+  document.getElementById('rsvpBtns').style.display = 'none';
+  const f = document.getElementById('nameForm');
+  f.style.display = 'flex';
+  setTimeout(() => document.getElementById('guestName').focus(), 80);
+}
+
+function submitRSVP() {
+  const name = document.getElementById('guestName').value.trim();
+  if (!name) {
+    document.getElementById('guestName').style.borderColor = '#d4a853';
+    document.getElementById('guestName').placeholder = 'Te rugăm să introduci numele...';
+    return;
+  }
+  document.getElementById('nameForm').style.display = 'none';
+  if (choice === 'yes') {
+    document.getElementById('confYesText').textContent = name + ', ne bucurăm că vii! 🥂';
+    document.getElementById('confYes').style.display = 'block';
+    triggerPetals();
+  } else {
+    document.getElementById('confNoText').textContent = name + ', ne pare rău că nu poți fi prezent.';
+    document.getElementById('confNo').style.display = 'block';
+  }
+}
+
+function triggerPetals() {
+  const c = document.getElementById('petals');
+  const e = ['🌸','🌿','✨','🌺','🍃','💛','🎊'];
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = e[Math.floor(Math.random()*e.length)];
+    p.style.left = Math.random()*100+'vw';
+    p.style.fontSize = (0.9+Math.random()*1)+'rem';
+    p.style.animationDuration = (4+Math.random()*5)+'s';
+    p.style.animationDelay = (Math.random()*2.5)+'s';
+    c.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter' && document.getElementById('nameForm').style.display==='flex') submitRSVP();
+});
+</script>
+</body>
+</html>
