@@ -766,6 +766,7 @@
 
     <div class="name-form" id="nameForm">
       <input class="name-input" id="guestName" type="text" placeholder="Numele tău...">
+      <input class="name-input" id="guestEmail" type="email" placeholder="Adresa ta de email...">
       <button class="btn-confirm" onclick="submitRSVP()">Confirmă →</button>
     </div>
 
@@ -947,10 +948,17 @@ function startRSVP(c) {
 }
 
 function submitRSVP() {
-  const name = document.getElementById('guestName').value.trim();
+  const name  = document.getElementById('guestName').value.trim();
+  const email = document.getElementById('guestEmail').value.trim();
+
   if (!name) {
     document.getElementById('guestName').style.borderColor = '#d4a853';
     document.getElementById('guestName').placeholder = 'Te rugăm să introduci numele...';
+    return;
+  }
+  if (!email || !email.includes('@')) {
+    document.getElementById('guestEmail').style.borderColor = '#d4a853';
+    document.getElementById('guestEmail').placeholder = 'Introdu un email valid...';
     return;
   }
 
@@ -959,10 +967,11 @@ function submitRSVP() {
 
   document.getElementById('nameForm').style.display = 'none';
 
-  // Send to Google Sheets via GET (most reliable for Apps Script)
+  // Send to Google Sheets + trigger confirmation email
   const url = SHEET_URL + '?name=' + encodeURIComponent(name) +
     '&response=' + encodeURIComponent(choice === 'yes' ? 'DA' : 'NU') +
-    '&invitat=' + encodeURIComponent(invitat);
+    '&invitat=' + encodeURIComponent(invitat) +
+    '&email=' + encodeURIComponent(email);
 
   const img = new Image();
   img.src = url;
